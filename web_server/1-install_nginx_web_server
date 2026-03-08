@@ -4,7 +4,11 @@
 sudo apt-get update -y
 sudo apt-get install -y nginx
 
-# Set the default page content
+# Ensure nginx is running
+sudo service nginx start
+
+# Configure the default page
 echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
 
+# Restart nginx
 sudo service nginx restart
