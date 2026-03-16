@@ -12,3 +12,4 @@ echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/
 
 # Restart nginx
 sudo service nginx restart
+
