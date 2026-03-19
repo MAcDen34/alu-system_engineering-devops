@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Installs and configures HAProxy on lb-01 to load balance web-01 and web-02
+
+# Update and install HAProxy
+sudo apt-get update -y
+sudo apt-get install -y haproxy
+
+# Enable HAProxy to be managed via init script
+sudo sed -i 's/ENABLED=0/ENABLED=1/' /etc/default/haproxy
+
+# Configure HAProxy
+sudo bash -c 'cat > /etc/haproxy/haproxy.cfg << EOF
+
+frontend http_front
+    bind *:80
+    default_backend backend_cluster
+
+backend backend_cluster
+    balance roundrobin
+    server 7056-web-01 	3.95.187.87:80 check
+    server 7056-web-02 	44.211.134.110:80 check
+EOF
+
+# Validate config and restart
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+sudo service haproxy restart
+sudo systemctl enable haproxy
