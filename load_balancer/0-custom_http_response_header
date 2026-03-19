@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Installs and configures Nginx to serve "Holberton School" on port 80
+sudo apt-get update -y
+sudo apt-get install -y nginx
+# Stop Apache if it exists
+sudo systemctl stop apache2 2>/dev/null || true
+sudo fuser -k 80/tcp 2>/dev/null || true
+# Write the default page
+echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
+# Write a clean nginx config (overwrite, don't append)
+sudo bash -c 'cat > /etc/nginx/sites-available/default' << 'EOF'
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+    server_name _;
+    add_header X-Served-By $hostname;
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}
+EOF
+sudo nginx -t
+sudo systemctl restart nginx
