@@ -5,6 +5,9 @@
 sudo apt-get update
 sudo apt-get install ufw -y
 
+# Reset ufw to clear any existing rules
+sudo ufw reset --force
+
 # Set default to deny all incoming traffic
 
 sudo ufw default deny incoming
